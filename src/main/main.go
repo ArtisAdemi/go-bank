@@ -12,6 +12,7 @@ func main() {
 	store, err := storage.NewPostgresStore()
 	if err != nil {
 		log.Fatal(err)
+		panic(err)
 	}
 
 	if err := store.Init(); err != nil {
