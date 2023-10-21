@@ -27,7 +27,7 @@ func (s *APIServer) Run() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/account", makeHTTPHandleFunc(s.handleAccount))
-	router.HandleFunc("/account/{id}", makeHTTPHandleFunc(s.handleGetAccount))
+	router.HandleFunc("/account/{id}", makeHTTPHandleFunc(s.handleGetAccountById))
 
 	http.ListenAndServe(s.listenAddr, router)
 
@@ -48,13 +48,27 @@ func (s *APIServer) handleAccount(w http.ResponseWriter, r *http.Request) error 
 	return fmt.Errorf("method not allowed %s", r.Method)
 }
 
+//  Get /account
+
 func (s *APIServer) handleGetAccount(w http.ResponseWriter, r *http.Request) error {
+
+	accounts, err := s.store.GetAccounts()
+	if err != nil {
+		return err
+	}
+
+	return WriteJSON(w, http.StatusOK, accounts)
+}
+
+// Get /account/{id}
+func (s *APIServer) handleGetAccountById(w http.ResponseWriter, r *http.Request) error {
 
 	account := types.NewAccount("Artis", "Ademi")
 
 	return WriteJSON(w, http.StatusOK, account)
 }
 
+// POST /account/{params}
 func (s *APIServer) handleCreateAccount(w http.ResponseWriter, r *http.Request) error {
 	createAccountReq := new(types.CreateAccountRequest)
 	if err := json.NewDecoder(r.Body).Decode(createAccountReq); err != nil {
