@@ -1,0 +1,4 @@
+vendor
+MakeFile
+go.mod
+go.sum

@@ -73,15 +73,9 @@ func (s *PostgresStore) CreateAccount(acc *types.Account) error {
 func (s *PostgresStore) UpdateAccount(*types.Account) error {
 	return nil
 }
-func (s *PostgresStore) DeleteAccount(id int) (*types.Account, error) {
-	rows, err := s.db.Query("delete from accounts where id = $1", id)
-	if err != nil {
-		return nil, err
-	}
-	for rows.Next() {
-		return scanIntoAccount(rows)
-	}
-	return nil, nil
+func (s *PostgresStore) DeleteAccount(id int) error {
+	_, err := s.db.Query("delete from accounts where id = $1", id)
+	return err
 }
 func (s *PostgresStore) GetAccountByID(id int) (*types.Account, error) {
 	rows, err := s.db.Query("select * from accounts where id = $1", id)

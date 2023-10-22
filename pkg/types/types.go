@@ -19,6 +19,11 @@ type CreateAccountRequest struct {
 	LastName  string `json:"lastName"`
 }
 
+type TransferRequest struct {
+	ToAccount int `json:"toAccount"`
+	Amount    int `json:"amount"`
+}
+
 func NewAccount(firstName, lastName string) *Account {
 	return &Account{
 		// ID:        rand.Intn(10000),
